@@ -23,7 +23,7 @@ define mkdir::p (
   exec { $use_title:
     command => "mkdir -p '${path}'",
     unless  => "test -d '${path}'",
-    path    => '/bin:/usr:bin',
+    path    => '/bin:/usr/bin',
     before  => Anchor["${use_title}__end"],
   }
 
@@ -36,7 +36,7 @@ define mkdir::p (
       exec { "${use_title}_chmod__${mode}":
         command => "chmod ${mode} '${path}'",
         unless  => "test $(stat -c %a '${path}') = ${mode} -o $(stat -c %a '${path}') = ${threedigitmode}",
-        path    => '/bin:/usr:bin',
+        path    => '/bin:/usr/bin',
         require => Exec[$use_title],
         before  => Anchor["${use_title}__end"],
       }
@@ -46,7 +46,7 @@ define mkdir::p (
       exec { "${use_title}_chown__${owner}":
         command => "chown ${owner} '${path}'",
         unless  => "test $(stat -c %U '${path}') = ${owner} -o $(stat -c %u '${path}') = ${owner}",
-        path    => '/bin:/usr:bin',
+        path    => '/bin:/usr/bin',
         require => Exec[$use_title],
         before  => Anchor["${use_title}__end"],
       }

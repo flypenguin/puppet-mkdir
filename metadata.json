@@ -1,6 +1,6 @@
 {
   "name": "flypenguin-mkdir",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "Axel Bock <mr.axel.bock@gmail.com>",
   "license": "MIT",
   "summary": "Provides a useful mkdir::p define, works only on *nix, tested on Linux",

@@ -56,7 +56,7 @@ define mkdir::p (
       exec { "${use_title}_chgrp__${group}":
         command => "chgrp ${group} '${path}'",
         unless  => "test $(stat -c %G '${path}') = ${group} -o $(stat -c %g '${path}') = ${group}",
-        path    => '/bin:/usr:bin',
+        path    => '/bin:/usr/bin',
         require => Exec[$use_title],
         before  => Anchor["${use_title}__end"],
       }

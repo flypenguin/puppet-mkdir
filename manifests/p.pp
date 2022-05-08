@@ -1,7 +1,8 @@
 #
-# = Define: figaro::helpers::mkdirp
+# = Define: mkdir::p
 #
 # A useful mkdir::p resource.
+
 #
 #
 # == Author(s)
@@ -9,29 +10,27 @@
 # * Axel Bock <mr.axel.bock@gmail.com>
 #
 define mkdir::p (
-  $path           = $title,
-  $mode           = undef,
-  $owner          = undef,
-  $group          = undef,
-  $declare_file   = false,
+  Stdlib::Absolutepath               $path         = $title,
+  Enum[absent, present]              $ensure       = present,
+  Optional[Stdlib::Filemode]         $mode         = undef,
+  Optional[Variant[Integer, String]] $owner        = undef,
+  Optional[Variant[Integer, String]] $group        = undef,
+  Boolean                            $declare_file = false,
 ) {
 
   $use_title = "mkdir_p_${title}"
 
-  anchor { "${use_title}__begin": } ->
-
-  exec { $use_title:
+  anchor { "${use_title}__begin": }
+  -> exec { $use_title:
     command => "mkdir -p '${path}'",
     unless  => "test -d '${path}'",
     path    => '/bin:/usr/bin',
     before  => Anchor["${use_title}__end"],
   }
 
-  if ! $declare_file {
+  if !$declare_file {
 
     if $mode {
-      validate_re($mode, '^[0-9]{4}$',
-        'mkdirp: Must give $mode as 4-digit-string')
       $threedigitmode = inline_template('<%= @mode[1..-1] if @mode[0] == "0" %>')
       exec { "${use_title}_chmod__${mode}":
         command => "chmod ${mode} '${path}'",
@@ -65,7 +64,7 @@ define mkdir::p (
   } else {
 
     file { $path:
-      ensure  => 'directory',
+      ensure  => directory,
       owner   => $owner,
       group   => $group,
       mode    => $mode,

@@ -30,7 +30,7 @@ define mkdir::p (
   if ! $declare_file {
 
     if $mode {
-      validate_re($mode, '^[0-9]{4}$',
+      validate_legacy(String, 'validate_re', $mode, '^[0-9]{4}$',
         'mkdirp: Must give $mode as 4-digit-string')
       $threedigitmode = inline_template('<%= @mode[1..-1] if @mode[0] == "0" %>')
       exec { "${use_title}_chmod__${mode}":
